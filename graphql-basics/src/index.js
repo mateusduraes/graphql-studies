@@ -1,3 +1,5 @@
-import { message } from "./myModule";
+import myCurrentLocation, { message, name } from "./myModule";
 
-console.log(`Hello GraphQL, ${message}`);
+console.log(`Message: ${message}`);
+console.log(`Name: ${name}`);
+console.log(`My current location: ${myCurrentLocation}`);
