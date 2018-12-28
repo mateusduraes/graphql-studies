@@ -4,13 +4,25 @@ import { GraphQLServer } from "graphql-yoga";
 const typeDefs = `
   type Query {
     hello: String!
+    name: String!
+    location: String!
+    bio: String!
   }
 `
 // Resolvers
 const resolvers = {
   Query: {
     hello () {
-      return `This is my first query.`
+      return `This is my first query.`;
+    },
+    name () {
+      return 'Mateus';
+    },
+    location () {
+      return 'Brazil';
+    },
+    bio () {
+      return 'Hello, im developer';
     }
   }
 }
