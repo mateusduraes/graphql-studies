@@ -1,13 +1,46 @@
 import { GraphQLServer } from "graphql-yoga";
 
 // Scalar types ->  String, Boolea, Int, Float, ID
+const users = [
+  {
+    id: '1',
+    name: 'Mateus',
+    email: 'mateus@example.com',
+    age: 24
+  },
+  {
+    id: '2',
+    name: 'Sara',
+    email: 'sara@example.com',    
+  },
+  {
+    id: '3',
+    name: 'Mike',
+    email: 'mike@example.com',    
+    age: 31,    
+  },
+];
+
+const posts = [
+  {
+    id: '1',
+    title: "GraphQL",
+    body: 'Hello GraphQL',
+    published: true,
+  },
+  {
+    id: '2',
+    title: "JavaScript",
+    body: 'Javascript is good',
+    published: true,
+  }
+];
 
 // Type definitions (schema)
 const typeDefs = `
-type Query {
-    greeting(name: String, position: String): String!
-    add(numbers: [Float!]!): Float!
-    grades: [Int!]!
+  type Query {
+    users(query: String): [User!]!
+    posts(query: String): [Post!]!
     me: User!
     post: Post!
   }
@@ -29,20 +62,21 @@ type Query {
 // Resolvers
 const resolvers = {
   Query: {
-    greeting(parent, args, context, info) {
-      if (args.name && args.position) {
-        return `Hello, ${args.name}. You are my favorite ${args.position}`;
+    users (parent, args, context, info) {
+      if (args.query) {
+        return users.filter(user => user.name.toLocaleLowerCase().includes(args.query.toLocaleLowerCase()));
       }
-      return 'Hello!'
+      return users;
     },
-    add(parent, args, context, info) {
-      if (args.numbers.length === 0) {
-        return 0;
+    posts (parent, args, context, info) {
+      if (args.query) {
+        return posts.filter(post => {
+          const matchTitle = post.title.toLowerCase().includes(args.query.toLowerCase())
+          const matchBody = post.body.toLowerCase().includes(args.query.toLowerCase())
+          return matchTitle || matchBody
+        });
       }
-      return args.numbers.reduce((prev, curr) => prev + curr, 0);
-    },
-    grades(parent, args, context, info) {
-      return [99, 80, 93  ];
+      return posts;
     },
     me() {
       return {
@@ -58,7 +92,7 @@ const resolvers = {
         body: '',
         published: false,
       }
-    }
+    },
   }
 }
 
