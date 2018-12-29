@@ -27,12 +27,21 @@ const posts = [
     title: "GraphQL",
     body: 'Hello GraphQL',
     published: true,
+    author: '1',
   },
   {
     id: '2',
     title: "JavaScript",
     body: 'Javascript is good',
     published: true,
+    author: '1'
+  },
+  {
+    id: '3',
+    title: "Ionic",
+    body: 'Ionic is good',
+    published: true,
+    author: '2'
   }
 ];
 
@@ -57,6 +66,7 @@ const typeDefs = `
     title: String!
     body: String!
     published: Boolean!
+    author: User!
   }
 `
 // Resolvers
@@ -93,6 +103,11 @@ const resolvers = {
         published: false,
       }
     },
+  },
+  Post: {
+    author(parent, args, context, info) {
+      return users.find(user => user.id === parent.author);
+    }
   }
 }
 
