@@ -17,9 +17,12 @@ const server = new GraphQLServer({
         Subscription,
         User,
         Post,
-        Comment,
+        Comment
     },
-    context: { db, pubsub },
+    context: {
+        db,
+        pubsub
+    }
 })
 
 server.start(() => {
